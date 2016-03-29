@@ -7,14 +7,14 @@ type GetRes struct {
 	messageID uint64
 	status    byte
 	topology  byte
-	key       []byte
+	object    []byte
 }
 
 func createGet(key []byte, messageID uint64, cachename string) []byte {
 
 	p := NewBuffer([]byte{RequestMagic})
 	p.EncodeVarint(messageID)
-	p.EncodeRawBytes([]byte{ProtocolVersionVersion20, GetRequest})
+	p.EncodeRawBytes([]byte{Protocol20, GetRequest})
 	p.EncodeRawBytes([]byte{0, 0})
 	p.EncodeRawBytes([]byte{ClientIntelligenceBasic})
 	p.EncodeRawBytes([]byte{0})
@@ -51,7 +51,7 @@ func (p *Buffer) DecodeGetResponse() (*GetRes, error) {
 		}
 		response.status, _ = p.decodeStatus()
 		response.topology, _ = p.decodeTopology()
-		response.key, _ = p.DecodeRawBytes()
+		response.object, _ = p.DecodeRawBytes()
 
 	} else {
 		return response, err
