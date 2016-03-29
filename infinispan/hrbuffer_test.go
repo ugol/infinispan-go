@@ -1,18 +1,13 @@
 package infinispan
 
-import (
-	"fmt"
-	"testing"
-)
+import "testing"
 
 func TestEncodeInt(t *testing.T) {
 
 	p := NewBuffer(nil)
-	fmt.Printf("Original buffer: %v\n", p.buf)
 	p.EncodeVarint(0)
 	p.EncodeVarint(1)
 	p.EncodeVarint(2)
-	fmt.Printf("Original buffer: %v\n", p.buf)
 	if p.buf[0] != byte(0) {
 		t.Errorf("Wrong encoded value, expected %d, was %d", 0, p.buf[0])
 	}
@@ -31,9 +26,7 @@ func TestEncodeString(t *testing.T) {
 	plus := "rocks"
 
 	p := NewBuffer(nil)
-	fmt.Printf("Original buffer: %v\n", p.buf)
 	p.EncodeString(original)
-	fmt.Printf("First string: %v\n", p.buf)
 	p.EncodeString(plus)
 
 	if p.buf[0] != byte(len(original)) {
@@ -55,8 +48,6 @@ func TestEncodeString(t *testing.T) {
 	if encoded != plus {
 		t.Errorf("Wrong string, expected %s, was %s", plus, encoded)
 	}
-
-	fmt.Printf("Second string: %v\n", p.buf)
 
 }
 
