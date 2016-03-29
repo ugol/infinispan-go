@@ -7,7 +7,7 @@ import (
 
 func TestSimpleIds(t *testing.T) {
 
-	MakeId(0)
+	MakeID(0)
 	x := <-id
 	x = <-id
 	x = <-id
@@ -20,7 +20,7 @@ func TestSimpleIds(t *testing.T) {
 
 func TestMaxId(t *testing.T) {
 
-	MakeId(math.MaxUint64)
+	MakeID(math.MaxUint64)
 	x := <-id
 	if x != math.MaxUint64 {
 		t.Errorf("Wrong id, expected max uint64 %d, was %d", uint64(math.MaxUint64), x)

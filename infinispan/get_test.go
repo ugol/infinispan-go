@@ -20,7 +20,7 @@ func TestCreateGet(t *testing.T) {
 		0x31, //Key: 1
 	}
 
-	MakeId(0)
+	MakeID(0)
 	get := createGet([]byte("1"), <-id, "")
 
 	if !bytes.Equal(expectedGet, get) {

@@ -1,5 +1,6 @@
 package infinispan
 
+// PutRes structure fr Put Response
 type PutRes struct {
 	messageID uint64
 	status    byte

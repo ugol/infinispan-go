@@ -6,15 +6,18 @@ import (
 	"io"
 )
 
+// Buffer is a byte buffer which is the basis to decode/encode
 type Buffer struct {
 	buf   []byte
 	index int
 }
 
+//NewBuffer creates a new Buffer
 func NewBuffer(b []byte) *Buffer {
 	return &Buffer{buf: b, index: 0}
 }
 
+//EncodeVarint encodes a vInt in the buffer
 func (p *Buffer) EncodeVarint(x uint64) error {
 	for x >= 1<<7 {
 		p.buf = append(p.buf, uint8(x&0x7f|0x80))
@@ -24,6 +27,7 @@ func (p *Buffer) EncodeVarint(x uint64) error {
 	return nil
 }
 
+//DecodeVarint decodes a vInt from the buffer
 func (p *Buffer) DecodeVarint() (x uint64, err error) {
 	// x, err already 0
 
@@ -49,28 +53,33 @@ func (p *Buffer) DecodeVarint() (x uint64, err error) {
 	return
 }
 
+//EncodeString encodes a string in the buffer
 func (p *Buffer) EncodeString(s string) error {
 	p.EncodeVarint(uint64(len(s)))
 	p.buf = append(p.buf, s...)
 	return nil
 }
 
+//EncodeRawBytes encodes a bytes slice in the buffer
 func (p *Buffer) EncodeRawBytes(b []byte) error {
 	p.buf = append(p.buf, b...)
 	return nil
 }
 
+//EncodeBytes encodes a bytes slice in the buffer prepending the [] length
 func (p *Buffer) EncodeBytes(b []byte) error {
 	p.EncodeVarint(uint64(len(b)))
 	p.buf = append(p.buf, b...)
 	return nil
 }
 
+//DecodeString decodesa protobuf encoded binary in a String
 func DecodeString(b []byte) string {
 	len := int(b[0])
 	return string(b[1 : len+1])
 }
 
+//DecodeRawBytes gets an []bytes from the buffer
 func (p *Buffer) DecodeRawBytes() (buf []byte, err error) {
 	n, err := p.DecodeVarint()
 	if err != nil {
@@ -95,10 +104,9 @@ func (p *Buffer) DecodeRawBytes() (buf []byte, err error) {
 func (p *Buffer) decodeMagicResponse() error {
 	if p.buf[0] != ResponseMagic {
 		return errors.New("Not a HotRod Response")
-	} else {
-		p.index++
-		return nil
 	}
+	p.index++
+	return nil
 }
 
 func (p *Buffer) currentByte() (byte, error) {

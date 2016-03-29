@@ -2,6 +2,7 @@ package infinispan
 
 import "errors"
 
+// GetRes is the structure of a Get response
 type GetRes struct {
 	messageID uint64
 	status    byte
@@ -9,10 +10,10 @@ type GetRes struct {
 	key       []byte
 }
 
-func createGet(key []byte, messageId uint64, cachename string) []byte {
+func createGet(key []byte, messageID uint64, cachename string) []byte {
 
 	p := NewBuffer([]byte{RequestMagic})
-	p.EncodeVarint(messageId)
+	p.EncodeVarint(messageID)
 	p.EncodeRawBytes([]byte{ProtocolVersionVersion20, GetRequest})
 	p.EncodeRawBytes([]byte{0, 0})
 	p.EncodeRawBytes([]byte{ClientIntelligenceBasic})
@@ -22,7 +23,7 @@ func createGet(key []byte, messageId uint64, cachename string) []byte {
 
 }
 
-func (p *Buffer) decodeMessageId() (uint64, error) {
+func (p *Buffer) decodeMessageID() (uint64, error) {
 	return p.DecodeVarint()
 }
 
@@ -38,12 +39,13 @@ func (p *Buffer) decodeOpcode() (byte, error) {
 	return p.currentByte()
 }
 
+// DecodeGetResponse creates a Get Response from a buffer
 func (p *Buffer) DecodeGetResponse() (*GetRes, error) {
 
 	var response = &GetRes{}
 
 	if err := p.decodeMagicResponse(); err == nil {
-		response.messageID, _ = p.decodeMessageId()
+		response.messageID, _ = p.decodeMessageID()
 		if op, _ := p.decodeOpcode(); op != GetResponse {
 			return response, errors.New("Not a GET Response")
 		}

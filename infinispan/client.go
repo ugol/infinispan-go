@@ -6,15 +6,18 @@ import (
 	"net"
 )
 
+//Client ...
 type Client struct {
 	server     string
 	connection net.Conn
 }
 
+//NewClient creates a new client
 func NewClient(s string) *Client {
 	return &Client{server: s}
 }
 
+//Connect ...
 func (c *Client) Connect() {
 	conn, err := net.Dial("tcp", c.server)
 	c.connection = conn
@@ -23,12 +26,14 @@ func (c *Client) Connect() {
 	}
 }
 
+//Close ...
 func (c *Client) Close() {
 	if c.connection != nil {
 		c.connection.Close()
 	}
 }
 
+// TestConnect does a simple integration test on a local Infinispan C/S
 func TestConnect() {
 
 	c, err := net.Dial("tcp", "127.0.0.1:11222")

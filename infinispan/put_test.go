@@ -27,7 +27,7 @@ func TestCreatePut(t *testing.T) {
 		0x6c, //l
 	}
 
-	MakeId(0)
+	MakeID(0)
 	put := createPut([]byte("2"), []byte("ugol"), <-id, "")
 
 	if !bytes.Equal(expectedPut, put) {
