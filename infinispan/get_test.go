@@ -7,7 +7,7 @@ import (
 
 func TestCreateGet(t *testing.T) {
 
-	expected_get := []byte{
+	expectedGet := []byte{
 		0xA0, //MAGIC BYTE
 		0x00, //Message Id
 		0x14, //Protocol version
@@ -23,8 +23,8 @@ func TestCreateGet(t *testing.T) {
 	MakeId(0)
 	get := createGet([]byte("1"), <-id, "")
 
-	if !bytes.Equal(expected_get, get) {
-		t.Errorf("Expected %v, was %v", expected_get, get)
+	if !bytes.Equal(expectedGet, get) {
+		t.Errorf("Expected %v, was %v", expectedGet, get)
 	}
 
 }

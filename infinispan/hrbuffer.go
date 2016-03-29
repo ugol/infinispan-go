@@ -12,7 +12,7 @@ type Buffer struct {
 }
 
 func NewBuffer(b []byte) *Buffer {
-	return &Buffer{buf: b, index:0}
+	return &Buffer{buf: b, index: 0}
 }
 
 func (p *Buffer) EncodeVarint(x uint64) error {
@@ -68,7 +68,7 @@ func (p *Buffer) EncodeBytes(b []byte) error {
 
 func DecodeString(b []byte) string {
 	len := int(b[0])
-	return string(b[1:len+1])
+	return string(b[1 : len+1])
 }
 
 func (p *Buffer) DecodeRawBytes() (buf []byte, err error) {
@@ -92,8 +92,8 @@ func (p *Buffer) DecodeRawBytes() (buf []byte, err error) {
 	return
 }
 
-func (p *Buffer) decodeMagicResponse() (error) {
-	if p.buf[0] != RESPONSE_MAGIC {
+func (p *Buffer) decodeMagicResponse() error {
+	if p.buf[0] != ResponseMagic {
 		return errors.New("Not a HotRod Response")
 	} else {
 		p.index++
@@ -106,4 +106,3 @@ func (p *Buffer) currentByte() (byte, error) {
 	p.index++
 	return p.buf[i], nil
 }
-

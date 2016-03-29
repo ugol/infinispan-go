@@ -2,110 +2,111 @@ package infinispan
 
 const (
 
-	DEFAULT_CACHE = ""
-// hotrod protocol magic numbers
-	REQUEST_MAGIC = 0xA0
-	RESPONSE_MAGIC = 0xA1
+	//DefaultCache is an empty string
+	DefaultCache = ""
 
-// hotrod protocol versions
-	PROTOCOL_VERSION_VERSION_20 = 20
-	PROTOCOL_VERSION_VERSION_21 = 21
-	PROTOCOL_VERSION_VERSION_22 = 22
-	PROTOCOL_VERSION_VERSION_23 = 23
-	PROTOCOL_VERSION_VERSION_24 = 24
+	// Magic numbers for requests and responses
+	RequestMagic  = 0XA0
+	ResponseMagic = 0XA1
 
-//requests
-	PUT_REQUEST = 0x01
-	GET_REQUEST = 0x03
-	PUT_IF_ABSENT_REQUEST = 0x05
-	REPLACE_REQUEST = 0x07
-	REPLACE_IF_UNMODIFIED_REQUEST = 0x09
-	REMOVE_REQUEST = 0x0B
-	REMOVE_IF_UNMODIFIED_REQUEST = 0x0D
-	CONTAINS_KEY_REQUEST = 0x0F
-	GET_WITH_VERSION_REQUEST = 0x11
-	CLEAR_REQUEST = 0x13
-	STATS_REQUEST = 0x15
-	PING_REQUEST = 0x17
-	BULK_GET_REQUEST = 0x19
-	GET_WITH_METADATA_REQUEST = 0x1B
-	BULK_GET_KEYS_REQUEST = 0x1D
-	QUERY_REQUEST = 0x1F
-	AUTH_MECH_LIST_REQUEST = 0x21
-	AUTH_REQUEST = 0x23
-	ADD_CLIENT_LISTENER_REQUEST = 0x25
-	REMOVE_CLIENT_LISTENER_REQUEST = 0x27
-	SIZE_REQUEST = 0x29
-	EXEC_REQUEST = 0x2B
-	PUT_ALL_REQUEST = 0x2D
-	GET_ALL_REQUEST = 0x2F
-	ITERATION_START_REQUEST = 0x31
-	ITERATION_NEXT_REQUEST = 0x33
-	ITERATION_END_REQUEST = 0x35
+	// Different Protocol Versions
+	ProtocolVersionVersion20 = 20
+	ProtocolVersionVersion21 = 21
+	ProtocolVersionVersion22 = 22
+	ProtocolVersionVersion23 = 23
+	ProtocolVersionVersion24 = 24
 
-//responses
-	PUT_RESPONSE = 0x02;
-	GET_RESPONSE = 0x04;
-	PUT_IF_ABSENT_RESPONSE = 0x06;
-	REPLACE_RESPONSE = 0x08;
-	REPLACE_IF_UNMODIFIED_RESPONSE = 0x0A;
-	REMOVE_RESPONSE = 0x0C;
-	REMOVE_IF_UNMODIFIED_RESPONSE = 0x0E;
-	CONTAINS_KEY_RESPONSE = 0x10;
-	GET_WITH_VERSION_RESPONSE = 0x12;
-	CLEAR_RESPONSE = 0x14;
-	STATS_RESPONSE = 0x16;
-	PING_RESPONSE = 0x18;
-	BULK_GET_RESPONSE = 0x1A;
-	GET_WITH_METADATA_RESPONSE = 0x1C;
-	BULK_GET_KEYS_RESPONSE = 0x1E;
-	QUERY_RESPONSE = 0x20;
-	AUTH_MECH_LIST_RESPONSE = 0x22;
-	AUTH_RESPONSE = 0x24;
-	ADD_CLIENT_LISTENER_RESPONSE = 0x26;
-	REMOVE_CLIENT_LISTENER_RESPONSE = 0x28;
-	SIZE_RESPONSE = 0x2A;
-	EXEC_RESPONSE = 0x2C;
-	PUT_ALL_RESPONSE = 0x2E;
-	GET_ALL_RESPONSE = 0x30;
-	ITERATION_START_RESPONSE = 0x32;
-	ITERATION_NEXT_RESPONSE = 0x34;
-	ITERATION_END_RESPONSE = 0x36;
-	ERROR_RESPONSE = 0x50;
-	CACHE_ENTRY_CREATED_EVENT_RESPONSE = 0x60;
-	CACHE_ENTRY_MODIFIED_EVENT_RESPONSE = 0x61;
-	CACHE_ENTRY_REMOVED_EVENT_RESPONSE = 0x62;
-	CACHE_ENTRY_EXPIRED_EVENT_RESPONSE = 0x63;
+	//Requests
+	PutRequest                  = 0X01
+	GetRequest                  = 0X03
+	PutIfAbsentRequest          = 0X05
+	ReplaceRequest              = 0X07
+	ReplaceIfUnmodifiedRequest  = 0X09
+	RemoveRequest               = 0X0B
+	RemoveIfUnmodifiedRequest   = 0X0D
+	ContainsKeyRequest          = 0X0F
+	GetWithVersionRequest       = 0X11
+	ClearRequest                = 0X13
+	StatsRequest                = 0X15
+	PingRequest                 = 0X17
+	BulkGetRequest              = 0X19
+	GetWithMetadataRequest      = 0X1B
+	BulkGetKeysRequest          = 0X1D
+	QueryRequest                = 0X1F
+	AuthMechListRequest         = 0X21
+	AuthRequest                 = 0X23
+	AddClientListenerRequest    = 0X25
+	RemoveClientListenerRequest = 0X27
+	SizeRequest                 = 0X29
+	ExecRequest                 = 0X2B
+	PutAllRequest               = 0X2D
+	GetAllRequest               = 0X2F
+	IterationStartRequest       = 0X31
+	IterationNextRequest        = 0X33
+	IterationEndRequest         = 0X35
 
-//response status
-	NO_ERROR_STATUS = 0x00
-	NOT_PUT_REMOVED_REPLACED_STATUS = 0x01
-	KEY_DOES_NOT_EXIST_STATUS = 0x02
-	SUCCESS_WITH_PREVIOUS = 0x03
-	NOT_EXECUTED_WITH_PREVIOUS = 0x04
-	INVALID_ITERATION = 0x05
-	NO_ERROR_STATUS_COMPAT = 0x06
-	SUCCESS_WITH_PREVIOUS_COMPAT = 0x07
-	NOT_EXECUTED_WITH_PREVIOUS_COMPAT = 0x08
+	//Responses
+	PutResponse                     = 0X02
+	GetResponse                     = 0X04
+	PutIfAbsentResponse             = 0X06
+	ReplaceResponse                 = 0X08
+	ReplaceIfUnmodifiedResponse     = 0X0A
+	RemoveResponse                  = 0X0C
+	RemoveIfUnmodifiedResponse      = 0X0E
+	ContainsKeyResponse             = 0X10
+	GetWithVersionResponse          = 0X12
+	ClearResponse                   = 0X14
+	StatsResponse                   = 0X16
+	PingResponse                    = 0X18
+	BulkGetResponse                 = 0X1A
+	GetWithMetadataResponse         = 0X1C
+	BulkGetKeysResponse             = 0X1E
+	QueryResponse                   = 0X20
+	AuthMechListResponse            = 0X22
+	AuthResponse                    = 0X24
+	AddClientListenerResponse       = 0X26
+	RemoveClientListenerResponse    = 0X28
+	SizeResponse                    = 0X2A
+	ExecResponse                    = 0X2C
+	PutAllResponse                  = 0X2E
+	GetAllResponse                  = 0X30
+	IterationStartResponse          = 0X32
+	IterationNextResponse           = 0X34
+	IterationEndResponse            = 0X36
+	ErrorResponse                   = 0X50
+	CacheEntryCreatedEventResponse  = 0X60
+	CacheEntryModifiedEventResponse = 0X61
+	CacheEntryRemovedEventResponse  = 0X62
+	CacheEntryExpiredEventResponse  = 0X63
 
-	INVALID_MAGIC_OR_MESSAGE_ID_STATUS = 0x81
-	REQUEST_PARSING_ERROR_STATUS = 0x84
-	UNKNOWN_COMMAND_STATUS = 0x82
-	SERVER_ERROR_STATUS = 0x85
-	UNKNOWN_VERSION_STATUS = 0x83
-	COMMAND_TIMEOUT_STATUS = 0x86
-	NODE_SUSPECTED = 0x87
-	ILLEGAL_LIFECYCLE_STATE = 0x88
+	//Response Status
+	NoErrorStatus                 = 0X00
+	NotPutRemovedReplacedStatus   = 0X01
+	KeyDoesNotExistStatus         = 0X02
+	SuccessWithPrevious           = 0X03
+	NotExecutedWithPrevious       = 0X04
+	InvalidIteration              = 0X05
+	NoErrorStatusCompat           = 0X06
+	SuccessWithPreviousCompat     = 0X07
+	NotExecutedWithPreviousCompat = 0X08
 
-	CLIENT_INTELLIGENCE_BASIC = 0x01
-	CLIENT_INTELLIGENCE_TOPOLOGY_AWARE = 0x02
-	CLIENT_INTELLIGENCE_HASH_DISTRIBUTION_AWARE = 0x03
+	InvalidMagicOrMessageIdStatus = 0X81
+	RequestParsingErrorStatus     = 0X84
+	UnknownCommandStatus          = 0X82
+	ServerErrorStatus             = 0X85
+	UnknownVersionStatus          = 0X83
+	CommandTimeoutStatus          = 0X86
+	NodeSuspected                 = 0X87
+	IllegalLifecycleState         = 0X88
 
-	INFINITE_LIFESPAN = 0x01
-	INFINITE_MAXIDLE = 0x02
+	ClientIntelligenceBasic                 = 0X01
+	ClientIntelligenceTopologyAware         = 0X02
+	ClientIntelligenceHashDistributionAware = 0X03
 
-	NO_TOPOLOGY = 0
-	DEFAULT_CACHE_TOPOLOGY = -1
-	SWITCH_CLUSTER_TOPOLOGY = -2
+	InfiniteLifespan = 0X01
+	InfiniteMaxidle  = 0X02
+
+	NoTopology            = 0
+	DefaultCacheTopology  = 1
+	SwitchClusterTopology = 2
 )
-

@@ -2,7 +2,7 @@ package infinispan
 
 import "errors"
 
-type GetResponse struct {
+type GetRes struct {
 	messageID uint64
 	status    byte
 	topology  byte
@@ -11,11 +11,11 @@ type GetResponse struct {
 
 func createGet(key []byte, messageId uint64, cachename string) []byte {
 
-	p := NewBuffer([]byte{REQUEST_MAGIC})
+	p := NewBuffer([]byte{RequestMagic})
 	p.EncodeVarint(messageId)
-	p.EncodeRawBytes([]byte{PROTOCOL_VERSION_VERSION_20, GET_REQUEST})
+	p.EncodeRawBytes([]byte{ProtocolVersionVersion20, GetRequest})
 	p.EncodeRawBytes([]byte{0, 0})
-	p.EncodeRawBytes([]byte{CLIENT_INTELLIGENCE_BASIC})
+	p.EncodeRawBytes([]byte{ClientIntelligenceBasic})
 	p.EncodeRawBytes([]byte{0})
 	p.EncodeBytes(key)
 	return p.buf
@@ -38,13 +38,13 @@ func (p *Buffer) decodeOpcode() (byte, error) {
 	return p.currentByte()
 }
 
-func (p *Buffer) DecodeGetResponse() (*GetResponse, error) {
+func (p *Buffer) DecodeGetResponse() (*GetRes, error) {
 
-	var response = &GetResponse{}
+	var response = &GetRes{}
 
 	if err := p.decodeMagicResponse(); err == nil {
 		response.messageID, _ = p.decodeMessageId()
-		if op, _ := p.decodeOpcode(); op != GET_RESPONSE {
+		if op, _ := p.decodeOpcode(); op != GetResponse {
 			return response, errors.New("Not a GET Response")
 		}
 		response.status, _ = p.decodeStatus()

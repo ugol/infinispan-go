@@ -39,7 +39,7 @@ func TestConnect() {
 	}
 
 	//put := createPut([]byte("2"), []byte("ugol"), <-id, DEFAULT_CACHE)
-	get := createGet([]byte("2"), <-id, DEFAULT_CACHE)
+	get := createGet([]byte("2"), <-id, DefaultCache)
 	fmt.Println(get)
 	var buf [1024]byte
 

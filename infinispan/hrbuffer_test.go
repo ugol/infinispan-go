@@ -1,8 +1,8 @@
 package infinispan
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func TestEncodeInt(t *testing.T) {
@@ -41,18 +41,18 @@ func TestEncodeString(t *testing.T) {
 		t.Errorf("Wrong length, expected %d, was %d", len(original), expectedLen)
 	}
 
-	encoded := string(p.buf[1:len(original) + 1])
-	if (encoded != original) {
+	encoded := string(p.buf[1 : len(original)+1])
+	if encoded != original {
 		t.Errorf("Wrong string, expected %s, was %s", original, encoded)
 	}
 
-	if p.buf[len(original) + 1] != byte(len(plus)) {
-		expectedLen := int(p.buf[len(original) + 1])
-		t.Errorf("Wrong length, expected %d, was %d", len(original) + 1, expectedLen)
+	if p.buf[len(original)+1] != byte(len(plus)) {
+		expectedLen := int(p.buf[len(original)+1])
+		t.Errorf("Wrong length, expected %d, was %d", len(original)+1, expectedLen)
 	}
 
-	encoded = string(p.buf[len(original) + 2:])
-	if (encoded != plus) {
+	encoded = string(p.buf[len(original)+2:])
+	if encoded != plus {
 		t.Errorf("Wrong string, expected %s, was %s", plus, encoded)
 	}
 
@@ -88,12 +88,11 @@ func TestDecodeString(t *testing.T) {
 
 	ugol := DecodeString(buf)
 
-	if (ugol != "ugol") {
+	if ugol != "ugol" {
 		t.Errorf("Wrong string, expected %s, was %s", "ugol", ugol)
 	}
 
 }
-
 
 func TestDecodeEmptyString(t *testing.T) {
 
@@ -103,10 +102,8 @@ func TestDecodeEmptyString(t *testing.T) {
 
 	empty := DecodeString(buf)
 
-	if (empty != "") {
+	if empty != "" {
 		t.Errorf("Wrong string, expected %s, was %s", "", empty)
 	}
 
 }
-
-

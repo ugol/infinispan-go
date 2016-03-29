@@ -7,7 +7,7 @@ import (
 
 func TestCreatePut(t *testing.T) {
 
-	expected_put := []byte{
+	expectedPut := []byte{
 		0xA0, //MAGIC BYTE
 		0x00, //Message Id
 		0x14, //Protocol version
@@ -30,8 +30,8 @@ func TestCreatePut(t *testing.T) {
 	MakeId(0)
 	put := createPut([]byte("2"), []byte("ugol"), <-id, "")
 
-	if !bytes.Equal(expected_put, put) {
-		t.Errorf("Expected %v, was %v", expected_put, put)
+	if !bytes.Equal(expectedPut, put) {
+		t.Errorf("Expected %v, was %v", expectedPut, put)
 	}
 
 }
