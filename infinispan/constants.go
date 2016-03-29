@@ -10,11 +10,11 @@ const (
 	ResponseMagic = 0XA1
 
 	// Different Protocol Versions
-	ProtocolVersionVersion20 = 20
-	ProtocolVersionVersion21 = 21
-	ProtocolVersionVersion22 = 22
-	ProtocolVersionVersion23 = 23
-	ProtocolVersionVersion24 = 24
+	Protocol20 = 20
+	Protocol21 = 21
+	Protocol22 = 22
+	Protocol23 = 23
+	Protocol24 = 24
 
 	//Requests
 	PutRequest                  = 0X01
