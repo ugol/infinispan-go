@@ -2,12 +2,9 @@ package infinispan
 
 import "errors"
 
-// GetRes is the structure of a Get response
-type GetRes struct {
-	messageID uint64
-	status    byte
-	topology  byte
-	object    []byte
+// ResponseGet is the structure of a Get response
+type ResponseGet struct {
+	object []byte
 }
 
 func createGet(key []byte, messageID uint64, cachename string) []byte {
@@ -23,34 +20,16 @@ func createGet(key []byte, messageID uint64, cachename string) []byte {
 
 }
 
-func (p *Buffer) decodeMessageID() (uint64, error) {
-	return p.DecodeVarint()
-}
-
-func (p *Buffer) decodeStatus() (byte, error) {
-	return p.currentByte()
-}
-
-func (p *Buffer) decodeTopology() (byte, error) {
-	return p.currentByte()
-}
-
-func (p *Buffer) decodeOpcode() (byte, error) {
-	return p.currentByte()
-}
-
 // DecodeGetResponse creates a Get Response from a buffer
-func (p *Buffer) DecodeGetResponse() (*GetRes, error) {
+func (p *Buffer) DecodeGetResponse() (*ResponseGet, error) {
 
-	var response = &GetRes{}
+	var response = &ResponseGet{}
+	header, err := p.DecodeResponseHeader()
 
-	if err := p.decodeMagicResponse(); err == nil {
-		response.messageID, _ = p.decodeMessageID()
-		if op, _ := p.decodeOpcode(); op != GetResponse {
+	if err == nil {
+		if header.opcode != GetResponse {
 			return response, errors.New("Not a GET Response")
 		}
-		response.status, _ = p.decodeStatus()
-		response.topology, _ = p.decodeTopology()
 		response.object, _ = p.DecodeRawBytes()
 
 	} else {

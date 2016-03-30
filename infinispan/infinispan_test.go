@@ -9,7 +9,7 @@ func TestSimplePutAndGet(t *testing.T) {
 
 	c, err := NewConnection("127.0.0.1:11222")
 	if err != nil {
-		//t.Error(err.Error())
+		t.Error(err.Error())
 		return
 	}
 	c.Put([]byte("1"), []byte("foo"))

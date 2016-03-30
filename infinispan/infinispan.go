@@ -33,24 +33,24 @@ func (c *Connection) Close() error {
 }
 
 //Get gets a key
-func (c *Connection) Get(key []byte) (*GetRes, error) {
+func (c *Connection) Get(key []byte) (*ResponseGet, error) {
 	get := createGet(key, <-id, DefaultCache)
 	c.connection.Write(get)
 	status, err := bufio.NewReader(c.connection).Read(c.buf[:1024])
 	if err != nil {
-		return &GetRes{}, err
+		return &ResponseGet{}, err
 	}
 	p := NewBuffer(c.buf[:status])
 	return p.DecodeGetResponse()
 }
 
 //Put puts an object with a key
-func (c *Connection) Put(key []byte, object []byte) (*PutRes, error) {
+func (c *Connection) Put(key []byte, object []byte) (*ResponsePut, error) {
 	put := createPut(key, object, <-id, DefaultCache)
 	c.connection.Write(put)
 	status, err := bufio.NewReader(c.connection).Read(c.buf[:1024])
 	if err != nil {
-		return &PutRes{}, err
+		return &ResponsePut{}, err
 	}
 	p := NewBuffer(c.buf[:status])
 	return p.DecodePutResponse()

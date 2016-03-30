@@ -12,6 +12,14 @@ type Buffer struct {
 	index int
 }
 
+//ResponseHeader represents the Header for all responses
+type ResponseHeader struct {
+	messageID uint64
+	opcode    byte
+	status    byte
+	topology  byte
+}
+
 //NewBuffer creates a new Buffer
 func NewBuffer(b []byte) *Buffer {
 	return &Buffer{buf: b, index: 0}
@@ -113,4 +121,37 @@ func (p *Buffer) currentByte() (byte, error) {
 	i := p.index
 	p.index++
 	return p.buf[i], nil
+}
+
+func (p *Buffer) decodeMessageID() (uint64, error) {
+	return p.DecodeVarint()
+}
+
+func (p *Buffer) decodeStatus() (byte, error) {
+	return p.currentByte()
+}
+
+func (p *Buffer) decodeTopology() (byte, error) {
+	return p.currentByte()
+}
+
+func (p *Buffer) decodeOpcode() (byte, error) {
+	return p.currentByte()
+}
+
+//DecodeResponseHeader decodes the common Response Header
+func (p *Buffer) DecodeResponseHeader() (*ResponseHeader, error) {
+
+	var response = &ResponseHeader{}
+
+	if err := p.decodeMagicResponse(); err == nil {
+		response.messageID, _ = p.decodeMessageID()
+		response.opcode, _ = p.decodeOpcode()
+		response.status, _ = p.decodeStatus()
+		response.topology, _ = p.decodeTopology()
+	} else {
+		return response, err
+	}
+
+	return response, nil
 }
