@@ -7,14 +7,10 @@ type ResponsePut struct {
 	//empty at the moment
 }
 
-func createPut(key []byte, value []byte, messageID uint64, cachename string) []byte {
+func createPut(key []byte, value []byte, messageID uint64, cacheName string) []byte {
 
-	p := NewBuffer([]byte{RequestMagic})
-	p.EncodeVarint(messageID)
-	p.EncodeRawBytes([]byte{Protocol20, PutRequest})
-	p.EncodeRawBytes([]byte{0, 0})
-	p.EncodeRawBytes([]byte{ClientIntelligenceBasic})
-	p.EncodeRawBytes([]byte{0})
+	p := NewBuffer([]byte{})
+	p.CreateHeader(messageID, PutRequest, cacheName)
 	p.EncodeBytes(key)
 	p.EncodeRawBytes([]byte{0, 0})
 	p.EncodeBytes(value)

@@ -7,14 +7,10 @@ type ResponseGet struct {
 	object []byte
 }
 
-func createGet(key []byte, messageID uint64, cachename string) []byte {
+func createGet(key []byte, messageID uint64, cacheName string) []byte {
 
-	p := NewBuffer([]byte{RequestMagic})
-	p.EncodeVarint(messageID)
-	p.EncodeRawBytes([]byte{Protocol20, GetRequest})
-	p.EncodeRawBytes([]byte{0, 0})
-	p.EncodeRawBytes([]byte{ClientIntelligenceBasic})
-	p.EncodeRawBytes([]byte{0})
+	p := NewBuffer([]byte{})
+	p.CreateHeader(messageID, GetRequest, cacheName)
 	p.EncodeBytes(key)
 	return p.buf
 
