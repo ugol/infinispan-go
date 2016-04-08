@@ -10,11 +10,7 @@ const (
 	ResponseMagic = 0XA1
 
 	// Different Protocol Versions
-	Protocol20 = 20
-	Protocol21 = 21
-	Protocol22 = 22
-	Protocol23 = 23
-	Protocol24 = 24
+	Protocol25 = 25
 
 	//Requests
 	PutRequest                  = 0X01
@@ -103,8 +99,7 @@ const (
 	ClientIntelligenceTopologyAware         = 0X02
 	ClientIntelligenceHashDistributionAware = 0X03
 
-	InfiniteLifespan = 0X01
-	InfiniteMaxidle  = 0X02
+	DefaultLifespanMaxIdle = 0x77
 
 	NoTopology            = 0
 	DefaultCacheTopology  = 1

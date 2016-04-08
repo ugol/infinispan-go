@@ -15,12 +15,32 @@ func NewBuffer(b []byte) *Buffer {
 func (p *Buffer) CreateHeader(messageID uint64, opcode byte, cachename string) {
 	p.EncodeRawBytes([]byte{RequestMagic})
 	p.EncodeVarint(messageID)
-	p.EncodeRawBytes([]byte{Protocol20})
+	p.EncodeRawBytes([]byte{Protocol25})
 	p.EncodeRawBytes([]byte{opcode})
 	p.EncodeString(cachename)
 	p.EncodeRawBytes([]byte{0}) //Client flags
 	p.EncodeRawBytes([]byte{ClientIntelligenceBasic})
 	p.EncodeRawBytes([]byte{0}) //Client Topology ID
+}
+
+//AddLifespanAndMaxIdle encodes Lifespan and Maxidle
+func (p *Buffer) AddLifespanAndMaxIdle(lifespan string, maxidle string) error {
+	lD, lT, lE := parseDuration(lifespan)
+	if lE != nil {
+		return lE
+	}
+	mD, mT, mE := parseDuration(maxidle)
+	if mE != nil {
+		return mE
+	}
+	p.EncodeRawBytes([]byte{lT<<4 | mT})
+	if lT < 7 {
+		p.EncodeVarint(lD)
+	}
+	if mT < 7 {
+		p.EncodeVarint(mD)
+	}
+	return nil
 }
 
 //DecodeResponseHeader decodes the common Response Header

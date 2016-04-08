@@ -10,7 +10,7 @@ func TestCreateGet(t *testing.T) {
 	expectedGet := []byte{
 		0xA0, //MAGIC BYTE
 		0x00, //Message Id
-		0x14, //Protocol version
+		0x19, //Protocol version
 		0x03, //Operation
 		0x00, //Cache name length ("" = default)
 		0x00, //Flags

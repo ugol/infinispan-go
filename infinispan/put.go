@@ -7,14 +7,14 @@ type ResponsePut struct {
 	//empty at the moment
 }
 
-func createPut(key []byte, value []byte, messageID uint64, cacheName string) []byte {
+func createPut(key []byte, value []byte, messageID uint64, cacheName string, lifespan string, maxidle string) ([]byte, error) {
 
 	p := NewBuffer([]byte{})
 	p.CreateHeader(messageID, PutRequest, cacheName)
 	p.EncodeBytes(key)
-	p.EncodeRawBytes([]byte{0, 0})
+	err := p.AddLifespanAndMaxIdle(lifespan, maxidle)
 	p.EncodeBytes(value)
-	return p.buf
+	return p.buf, err
 
 }
 

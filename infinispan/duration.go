@@ -29,11 +29,11 @@ func timeUnitToByte(unit string) byte {
 	}
 }
 
-func parseDuration(duration string) (int, byte, error) {
+func parseDuration(duration string) (uint64, byte, error) {
 
 	if d, err := strconv.Atoi(duration); err == nil {
 		if d < 0 {
-			return -1, 8, nil
+			return 0, 8, nil
 		}
 		if d == 0 {
 			return 0, 7, nil
@@ -48,6 +48,6 @@ func parseDuration(duration string) (int, byte, error) {
 
 	d, _ := strconv.Atoi(parsedDuration[1])
 	t := timeUnitToByte(parsedDuration[2])
-	return d, t, nil
+	return uint64(d), t, nil
 
 }

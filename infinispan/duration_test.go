@@ -10,7 +10,7 @@ func TestParsingDuration(t *testing.T) {
 
 	var tests = []struct {
 		input    string
-		duration int
+		duration uint64
 		time     byte
 		err      error
 	}{
@@ -22,7 +22,7 @@ func TestParsingDuration(t *testing.T) {
 		{"2m", 2, 4, nil},
 		{"1h", 1, 5, nil},
 		{"1d", 1, 6, nil},
-		{"-125", -1, 8, nil},
+		{"-125", 0, 8, nil},
 		{"0", 0, 7, nil},
 		{"5000", 0, 7, fmt.Errorf("Positive duration 5000 provided without time unit")},
 		{"1mm", 0, 7, fmt.Errorf("Unknown duration format for 1mm")},

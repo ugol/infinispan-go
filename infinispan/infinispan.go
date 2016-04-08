@@ -44,18 +44,33 @@ func (c *Connection) Get(key []byte) (*ResponseGet, error) {
 	return p.DecodeGetResponse()
 }
 
-//PutWithLifeSpan puts an object with a key and a lifespan
-//func (c *Connection) PutWithLifeSpan(key []byte, object []byte, lifespan string) (*ResponsePut, error) {
-//}
-
 //Put puts an object with a key
 func (c *Connection) Put(key []byte, object []byte) (*ResponsePut, error) {
-	put := createPut(key, object, <-id, DefaultCache)
-	c.connection.Write(put)
-	status, err := bufio.NewReader(c.connection).Read(c.buf[:1024])
-	if err != nil {
-		return &ResponsePut{}, err
+	return c.PutWithLifespanAndMaxidle(key, object, "0", "0")
+}
+
+//PutWithLifespan puts an object with a key and a lifespan
+func (c *Connection) PutWithLifespan(key []byte, object []byte, lifespan string) (*ResponsePut, error) {
+	return c.PutWithLifespanAndMaxidle(key, object, lifespan, "0")
+}
+
+//PutWithMaxidle puts an object with a key and a maxidle
+func (c *Connection) PutWithMaxidle(key []byte, object []byte, maxidle string) (*ResponsePut, error) {
+	return c.PutWithLifespanAndMaxidle(key, object, "0", maxidle)
+}
+
+//PutWithLifespanAndMaxidle puts an object with a key and a lifespan/maxidle
+func (c *Connection) PutWithLifespanAndMaxidle(key []byte, object []byte, lifespan string, maxidle string) (*ResponsePut, error) {
+	if put, createErr := createPut(key, object, <-id, DefaultCache, lifespan, maxidle); createErr == nil {
+		c.connection.Write(put)
+		if status, ioErr := bufio.NewReader(c.connection).Read(c.buf[:1024]); ioErr == nil {
+			p := NewBuffer(c.buf[:status])
+			return p.DecodePutResponse()
+		} else {
+			return &ResponsePut{}, ioErr
+		}
+	} else {
+		return &ResponsePut{}, createErr
 	}
-	p := NewBuffer(c.buf[:status])
-	return p.DecodePutResponse()
+
 }
