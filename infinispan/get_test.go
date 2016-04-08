@@ -20,8 +20,7 @@ func TestCreateGet(t *testing.T) {
 		0x31, //Key: 1
 	}
 
-	MakeID(0)
-	get := createGet([]byte("1"), <-id, "")
+	get := createGet([]byte("1"), 0, "")
 
 	if !bytes.Equal(expectedGet, get) {
 		t.Errorf("Expected %v, was %v", expectedGet, get)

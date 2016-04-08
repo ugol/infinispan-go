@@ -26,8 +26,7 @@ func TestCreateDefaultPut(t *testing.T) {
 		0x6c, //l
 	}
 
-	MakeID(0)
-	put, _ := createPut([]byte("2"), []byte("ugol"), <-id, "", "0", "0")
+	put, _ := createPut([]byte("2"), []byte("ugol"), 0, "", "0", "0")
 
 	if !bytes.Equal(expectedPut, put) {
 		t.Errorf("Expected %v, was %v", expectedPut, put)
@@ -57,8 +56,7 @@ func TestCreatePutWithLifespan(t *testing.T) {
 		0x6c, //l
 	}
 
-	MakeID(0)
-	put, _ := createPut([]byte("2"), []byte("ugol"), <-id, "", "5ms", "0")
+	put, _ := createPut([]byte("2"), []byte("ugol"), 0, "", "5ms", "0")
 
 	if !bytes.Equal(expectedPut, put) {
 		t.Errorf("Expected %v, was %v", expectedPut, put)
@@ -88,8 +86,7 @@ func TestCreatePutWithMaxidle(t *testing.T) {
 		0x6c, //l
 	}
 
-	MakeID(0)
-	put, _ := createPut([]byte("2"), []byte("ugol"), <-id, "", "0", "5ms")
+	put, _ := createPut([]byte("2"), []byte("ugol"), 0, "", "0", "5ms")
 
 	if !bytes.Equal(expectedPut, put) {
 		t.Errorf("Expected %v, was %v", expectedPut, put)
@@ -120,8 +117,7 @@ func TestCreatePutWithLifespanAndMaxidle(t *testing.T) {
 		0x6c, //l
 	}
 
-	MakeID(0)
-	put, _ := createPut([]byte("2"), []byte("ugol"), <-id, "", "5ms", "4ns")
+	put, _ := createPut([]byte("2"), []byte("ugol"), 0, "", "5ms", "4ns")
 
 	if !bytes.Equal(expectedPut, put) {
 		t.Errorf("Expected %v, was %v", expectedPut, put)
