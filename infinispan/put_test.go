@@ -39,7 +39,7 @@ func TestCreatePutWithLifespan(t *testing.T) {
 
 	expectedPut := []byte{
 		0xA0, //MAGIC BYTE
-		0x01, //Message Id
+		0x00, //Message Id
 		0x19, //Protocol version
 		0x01, //Operation
 		0x00, //Cache name length ("" = default)
