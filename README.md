@@ -1,10 +1,10 @@
 # Infinispan Go Client
 
-An Infinispan Go client Library 
+An Infinispan Go client Library
 
-## Usage 
+## Usage
 
-Runs a simple Integration test 
+Runs all Unit and Integration tests
 ```
-go run main.go
+go test -v
 ```
