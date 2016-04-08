@@ -99,7 +99,8 @@ const (
 	ClientIntelligenceTopologyAware         = 0X02
 	ClientIntelligenceHashDistributionAware = 0X03
 
-	DefaultLifespanMaxIdle = 0x77
+	DefaultDuration  = 0x7
+	InfiniteDuration = 0x8
 
 	NoTopology            = 0
 	DefaultCacheTopology  = 1

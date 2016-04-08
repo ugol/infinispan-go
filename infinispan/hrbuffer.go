@@ -34,10 +34,10 @@ func (p *Buffer) AddLifespanAndMaxIdle(lifespan string, maxidle string) error {
 		return mE
 	}
 	p.EncodeRawBytes([]byte{lT<<4 | mT})
-	if lT < 7 {
+	if lT < DefaultDuration {
 		p.EncodeVarint(lD)
 	}
-	if mT < 7 {
+	if mT < DefaultDuration {
 		p.EncodeVarint(mD)
 	}
 	return nil

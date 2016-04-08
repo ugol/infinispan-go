@@ -33,17 +33,17 @@ func parseDuration(duration string) (uint64, byte, error) {
 
 	if d, err := strconv.Atoi(duration); err == nil {
 		if d < 0 {
-			return 0, 8, nil
+			return 0, InfiniteDuration, nil
 		}
 		if d == 0 {
-			return 0, 7, nil
+			return 0, DefaultDuration, nil
 		}
-		return 0, 7, fmt.Errorf("Positive duration %d provided without time unit", d)
+		return 0, DefaultDuration, fmt.Errorf("Positive duration %d provided without time unit", d)
 	}
 
 	parsedDuration := durationRE.FindStringSubmatch(duration)
 	if parsedDuration == nil || len(parsedDuration) != 3 {
-		return 0, 7, fmt.Errorf("Unknown duration format for %s", duration)
+		return 0, DefaultDuration, fmt.Errorf("Unknown duration format for %s", duration)
 	}
 
 	d, _ := strconv.Atoi(parsedDuration[1])
