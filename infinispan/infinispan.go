@@ -44,6 +44,10 @@ func (c *Connection) Get(key []byte) (*ResponseGet, error) {
 	return p.DecodeGetResponse()
 }
 
+//PutWithLifeSpan puts an object with a key and a lifespan
+//func (c *Connection) PutWithLifeSpan(key []byte, object []byte, lifespan string) (*ResponsePut, error) {
+//}
+
 //Put puts an object with a key
 func (c *Connection) Put(key []byte, object []byte) (*ResponsePut, error) {
 	put := createPut(key, object, <-id, DefaultCache)
