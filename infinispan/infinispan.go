@@ -7,15 +7,22 @@ import (
 
 //Client represents a Client connection to an Hot Rod server
 type Client struct {
-	server     string
+	server    string
+	cacheName string
+
 	connection net.Conn
 	buf        [1024]byte
 }
 
-//NewClient creates a new client
+//NewClient creates a new client for the Default Cache
 func NewClient(s string) (*Client, error) {
-	c := &Client{server: s}
-	return c.connect()
+	return NewClientForCache(s, DefaultCache)
+}
+
+//NewClientForCache creates a new client for a Named Cache
+func NewClientForCache(s string, c string) (*Client, error) {
+	conn := &Client{server: s, cacheName: c}
+	return conn.connect()
 }
 
 func (c *Client) connect() (*Client, error) {
@@ -34,7 +41,7 @@ func (c *Client) Close() error {
 
 //Get gets a key
 func (c *Client) Get(key []byte) (*ResponseGet, error) {
-	get := createGet(key, <-id, DefaultCache)
+	get := createGet(key, <-id, c.cacheName)
 	c.connection.Write(get)
 	status, err := bufio.NewReader(c.connection).Read(c.buf[:1024])
 	if err != nil {
@@ -61,7 +68,7 @@ func (c *Client) PutWithMaxidle(key []byte, object []byte, maxidle string) (*Res
 
 //PutWithLifespanAndMaxidle puts an object with a key and a lifespan/maxidle
 func (c *Client) PutWithLifespanAndMaxidle(key []byte, object []byte, lifespan string, maxidle string) (*ResponsePut, error) {
-	if put, createErr := createPut(key, object, <-id, DefaultCache, lifespan, maxidle); createErr == nil {
+	if put, createErr := createPut(key, object, <-id, c.cacheName, lifespan, maxidle); createErr == nil {
 		c.connection.Write(put)
 		if status, ioErr := bufio.NewReader(c.connection).Read(c.buf[:1024]); ioErr == nil {
 			p := NewBuffer(c.buf[:status])
