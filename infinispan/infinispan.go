@@ -6,26 +6,26 @@ import (
 )
 
 //Connection represents a connection to an Hot Rod server
-type Connection struct {
+type Client struct {
 	server     string
 	connection net.Conn
 	buf        [1024]byte
 }
 
 //NewConnection creates a new client
-func NewConnection(s string) (*Connection, error) {
-	c := &Connection{server: s}
+func NewClient(s string) (*Client, error) {
+	c := &Client{server: s}
 	return c.connect()
 }
 
-func (c *Connection) connect() (*Connection, error) {
+func (c *Client) connect() (*Client, error) {
 	conn, err := net.Dial("tcp", c.server)
 	c.connection = conn
 	return c, err
 }
 
 //Close Hot Rod Connection
-func (c *Connection) Close() error {
+func (c *Client) Close() error {
 	if c.connection != nil {
 		return c.connection.Close()
 	}
@@ -33,7 +33,7 @@ func (c *Connection) Close() error {
 }
 
 //Get gets a key
-func (c *Connection) Get(key []byte) (*ResponseGet, error) {
+func (c *Client) Get(key []byte) (*ResponseGet, error) {
 	get := createGet(key, <-id, DefaultCache)
 	c.connection.Write(get)
 	status, err := bufio.NewReader(c.connection).Read(c.buf[:1024])
@@ -45,22 +45,22 @@ func (c *Connection) Get(key []byte) (*ResponseGet, error) {
 }
 
 //Put puts an object with a key
-func (c *Connection) Put(key []byte, object []byte) (*ResponsePut, error) {
+func (c *Client) Put(key []byte, object []byte) (*ResponsePut, error) {
 	return c.PutWithLifespanAndMaxidle(key, object, "0", "0")
 }
 
 //PutWithLifespan puts an object with a key and a lifespan
-func (c *Connection) PutWithLifespan(key []byte, object []byte, lifespan string) (*ResponsePut, error) {
+func (c *Client) PutWithLifespan(key []byte, object []byte, lifespan string) (*ResponsePut, error) {
 	return c.PutWithLifespanAndMaxidle(key, object, lifespan, "0")
 }
 
 //PutWithMaxidle puts an object with a key and a maxidle
-func (c *Connection) PutWithMaxidle(key []byte, object []byte, maxidle string) (*ResponsePut, error) {
+func (c *Client) PutWithMaxidle(key []byte, object []byte, maxidle string) (*ResponsePut, error) {
 	return c.PutWithLifespanAndMaxidle(key, object, "0", maxidle)
 }
 
 //PutWithLifespanAndMaxidle puts an object with a key and a lifespan/maxidle
-func (c *Connection) PutWithLifespanAndMaxidle(key []byte, object []byte, lifespan string, maxidle string) (*ResponsePut, error) {
+func (c *Client) PutWithLifespanAndMaxidle(key []byte, object []byte, lifespan string, maxidle string) (*ResponsePut, error) {
 	if put, createErr := createPut(key, object, <-id, DefaultCache, lifespan, maxidle); createErr == nil {
 		c.connection.Write(put)
 		if status, ioErr := bufio.NewReader(c.connection).Read(c.buf[:1024]); ioErr == nil {
