@@ -34,7 +34,3 @@ _testmain.go
 
 # Specific project files
 releases
-data/audio
-data/bot/bot-test.json
-data/bot/mastrobot.json
-data/bot/giannibot.json
