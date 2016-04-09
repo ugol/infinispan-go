@@ -5,14 +5,14 @@ import (
 	"net"
 )
 
-//Connection represents a connection to an Hot Rod server
+//Client represents a Client connection to an Hot Rod server
 type Client struct {
 	server     string
 	connection net.Conn
 	buf        [1024]byte
 }
 
-//NewConnection creates a new client
+//NewClient creates a new client
 func NewClient(s string) (*Client, error) {
 	c := &Client{server: s}
 	return c.connect()
