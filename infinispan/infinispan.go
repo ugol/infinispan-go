@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+//Server represents an host and a port
 type Server struct {
 	Host string
 	Port uint16
@@ -27,8 +28,8 @@ type Client struct {
 func NewClientJSON(conf string) (*Client, error) {
 	var c *Client
 	if err := json.NewDecoder(strings.NewReader(conf)).Decode(&c); err != nil {
-		//return &Client{Servers: []&Server{Host: "127.0.0.1", Port: 11222}, CacheName: ""}, err
-		return nil, err
+		log.Printf("Reverting to default conf because of error in JSON: %s", conf)
+		c = &Client{Servers: []Server{Server{Host: "127.0.0.1", Port: 11222}}, CacheName: ""}
 	}
 	log.Printf("Connecting to host %s:%d\n", c.Servers[0].Host, c.Servers[0].Port)
 	return c.connect()
