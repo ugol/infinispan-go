@@ -1,6 +1,9 @@
 package infinispan
 
-import "errors"
+import (
+	"errors"
+	"log"
+)
 
 // ResponsePut structure for Put Response
 type ResponsePut struct {
@@ -22,9 +25,9 @@ func createPut(key []byte, value []byte, messageID uint64, cacheName string, lif
 func (p *Buffer) DecodePutResponse() (*ResponsePut, error) {
 	var response = &ResponsePut{}
 	header, err := p.DecodeResponseHeader()
-
 	if err == nil {
 		if header.opcode != PutResponse {
+			log.Printf("%v", header)
 			return response, errors.New("Not a PUT Response")
 		}
 	} else {

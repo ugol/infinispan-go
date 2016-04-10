@@ -31,13 +31,14 @@ func NewClientJSON(conf string) (*Client, error) {
 		log.Printf("Reverting to default conf because of error in JSON: %s", conf)
 		c = &Client{Servers: []Server{Server{Host: "127.0.0.1", Port: 11222}}, CacheName: ""}
 	}
-	log.Printf("Connecting to host %s:%d\n", c.Servers[0].Host, c.Servers[0].Port)
 	return c.connect()
 }
 
 func (c *Client) connect() (*Client, error) {
 
 	server := fmt.Sprintf("%s:%d", c.Servers[0].Host, c.Servers[0].Port)
+	log.Printf("Connecting to host: %s\n", server)
+
 	conn, err := net.Dial("tcp", server)
 	c.connection = conn
 	return c, err

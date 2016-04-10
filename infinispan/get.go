@@ -1,6 +1,9 @@
 package infinispan
 
-import "errors"
+import (
+	"errors"
+	"log"
+)
 
 // ResponseGet is the structure of a Get response
 type ResponseGet struct {
@@ -23,10 +26,15 @@ func (p *Buffer) DecodeGetResponse() (*ResponseGet, error) {
 	header, err := p.DecodeResponseHeader()
 
 	if err == nil {
-		if header.opcode != GetResponse {
-			return response, errors.New("Not a GET Response")
-		}
 		response.object, _ = p.DecodeRawBytes()
+
+		if header.opcode == ErrorResponse {
+			log.Printf("%v", header)
+			return response, errors.New(DecodeString(response.object))
+		} else if header.opcode != GetResponse {
+			log.Printf("%v", header)
+			return response, errors.New("Not a possible GET Response")
+		}
 
 	} else {
 		return response, err

@@ -14,6 +14,10 @@ type ResponseHeader struct {
 	topology  byte
 }
 
+func (h *ResponseHeader) String() string {
+	return fmt.Sprintf("\nResponse Header\nMessage ID: %d\nOpcode: %#x (%s)\nStatus: %#x (%s)\nTopology: %d\n", h.messageID, h.opcode, responses[int(h.opcode)], h.status, status[int(h.status)], h.topology)
+}
+
 //DecodeVarint decodes a vInt from the buffer
 func (p *Buffer) DecodeVarint() (x uint64, err error) {
 	// x, err already 0
