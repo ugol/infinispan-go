@@ -3,6 +3,7 @@ package infinispan
 import (
 	"bytes"
 	"testing"
+	"time"
 )
 
 const conf = `
@@ -40,6 +41,42 @@ func TestSimplePutAndGet(t *testing.T) {
 		}
 
 		if notFound, errGet := c.Get([]byte("4")); errGet == nil {
+			if !bytes.Equal([]byte(""), notFound.object) {
+				t.Errorf("Expected %v, was %v", []byte(""), notFound)
+			}
+		} else {
+			t.Error(errGet.Error())
+		}
+
+	} else {
+		t.Error(err.Error())
+		return
+	}
+
+}
+
+func TestLifespanPut(t *testing.T) {
+
+	if c, err := NewClientJSON(conf); err == nil {
+		defer c.Close()
+
+		opts := map[string]string{
+			"lifespan": "10ms",
+		}
+
+		c.PutWithOptions([]byte("100"), []byte("T"), opts)
+
+		if found, errGet := c.Get([]byte("100")); errGet == nil {
+			if !bytes.Equal([]byte("T"), found.object) {
+				t.Errorf("Expected %v, was %v", []byte("T"), found)
+			}
+		} else {
+			t.Error(errGet.Error())
+		}
+
+		time.Sleep(20 * time.Millisecond)
+
+		if notFound, errGet := c.Get([]byte("100")); errGet == nil {
 			if !bytes.Equal([]byte(""), notFound.object) {
 				t.Errorf("Expected %v, was %v", []byte(""), notFound)
 			}
