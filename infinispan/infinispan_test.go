@@ -55,7 +55,7 @@ func TestSimplePutAndGet(t *testing.T) {
 
 }
 
-func TestLifespanPut(t *testing.T) {
+func TestLifespanAndMaxidlePut(t *testing.T) {
 
 	if c, err := NewClientJSON(conf); err == nil {
 		defer c.Close()
@@ -74,9 +74,33 @@ func TestLifespanPut(t *testing.T) {
 			t.Error(errGet.Error())
 		}
 
-		time.Sleep(20 * time.Millisecond)
+		time.Sleep(10 * time.Millisecond)
 
 		if notFound, errGet := c.Get([]byte("100")); errGet == nil {
+			if !bytes.Equal([]byte(""), notFound.object) {
+				t.Errorf("Expected %v, was %v", []byte(""), notFound)
+			}
+		} else {
+			t.Error(errGet.Error())
+		}
+
+		opts = map[string]string{
+			"maxidle": "10ms",
+		}
+
+		c.PutWithOptions([]byte("200"), []byte("T"), opts)
+
+		if found, errGet := c.Get([]byte("200")); errGet == nil {
+			if !bytes.Equal([]byte("T"), found.object) {
+				t.Errorf("Expected %v, was %v", []byte("T"), found)
+			}
+		} else {
+			t.Error(errGet.Error())
+		}
+
+		time.Sleep(10 * time.Millisecond)
+
+		if notFound, errGet := c.Get([]byte("200")); errGet == nil {
 			if !bytes.Equal([]byte(""), notFound.object) {
 				t.Errorf("Expected %v, was %v", []byte(""), notFound)
 			}
