@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"strconv"
 	"strings"
 )
 
@@ -66,21 +67,32 @@ func (c *Client) Get(key []byte) (*ResponseGet, error) {
 
 //Put puts an object with a key
 func (c *Client) Put(key []byte, object []byte) (*ResponsePut, error) {
-	return c.PutWithLifespanAndMaxidle(key, object, "0", "0")
+	return c.realPut(key, object, "0", "0", false)
 }
 
-//PutWithLifespan puts an object with a key and a lifespan
-func (c *Client) PutWithLifespan(key []byte, object []byte, lifespan string) (*ResponsePut, error) {
-	return c.PutWithLifespanAndMaxidle(key, object, lifespan, "0")
-}
+//PutWithOptions puts an object with a key and optional parameters
+func (c *Client) PutWithOptions(key []byte, object []byte, opts map[string]string) (*ResponsePut, error) {
+	lifespan := opts["lifespan"]
+	if lifespan == "" {
+		lifespan = "0"
+	}
 
-//PutWithMaxidle puts an object with a key and a maxidle
-func (c *Client) PutWithMaxidle(key []byte, object []byte, maxidle string) (*ResponsePut, error) {
-	return c.PutWithLifespanAndMaxidle(key, object, "0", maxidle)
+	maxidle := opts["maxidle"]
+	if maxidle == "" {
+		maxidle = "0"
+	}
+
+	returnValues, err := strconv.ParseBool(opts["returnValues"])
+
+	if err == nil {
+		return c.realPut(key, object, lifespan, maxidle, false)
+	}
+	return c.realPut(key, object, lifespan, maxidle, returnValues)
+
 }
 
 //PutWithLifespanAndMaxidle puts an object with a key and a lifespan/maxidle
-func (c *Client) PutWithLifespanAndMaxidle(key []byte, object []byte, lifespan string, maxidle string) (*ResponsePut, error) {
+func (c *Client) realPut(key []byte, object []byte, lifespan string, maxidle string, returnValue bool) (*ResponsePut, error) {
 	if put, createErr := createPut(key, object, <-id, c.CacheName, lifespan, maxidle); createErr == nil {
 		c.connection.Write(put)
 		if status, ioErr := bufio.NewReader(c.connection).Read(c.buf[:1024]); ioErr == nil {
