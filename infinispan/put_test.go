@@ -26,7 +26,7 @@ func TestCreateDefaultPut(t *testing.T) {
 		0x6c, //l
 	}
 
-	put, _ := createPut([]byte("2"), []byte("ugol"), 0, "", "0", "0")
+	put, _ := createPut([]byte("2"), []byte("ugol"), 0, "", "0", "0", false)
 
 	if !bytes.Equal(expectedPut, put) {
 		t.Errorf("Expected %v, was %v", expectedPut, put)
@@ -56,7 +56,7 @@ func TestCreatePutWithLifespan(t *testing.T) {
 		0x6c, //l
 	}
 
-	put, _ := createPut([]byte("2"), []byte("ugol"), 0, "", "5ms", "0")
+	put, _ := createPut([]byte("2"), []byte("ugol"), 0, "", "5ms", "0", false)
 
 	if !bytes.Equal(expectedPut, put) {
 		t.Errorf("Expected %v, was %v", expectedPut, put)
@@ -86,7 +86,7 @@ func TestCreatePutWithMaxidle(t *testing.T) {
 		0x6c, //l
 	}
 
-	put, _ := createPut([]byte("2"), []byte("ugol"), 0, "", "0", "5ms")
+	put, _ := createPut([]byte("2"), []byte("ugol"), 0, "", "0", "5ms", false)
 
 	if !bytes.Equal(expectedPut, put) {
 		t.Errorf("Expected %v, was %v", expectedPut, put)
@@ -117,10 +117,40 @@ func TestCreatePutWithLifespanAndMaxidle(t *testing.T) {
 		0x6c, //l
 	}
 
-	put, _ := createPut([]byte("2"), []byte("ugol"), 0, "", "5ms", "4ns")
+	put, _ := createPut([]byte("2"), []byte("ugol"), 0, "", "5ms", "4ns", false)
 
 	if !bytes.Equal(expectedPut, put) {
 		t.Errorf("Expected %v, was %v", expectedPut, put)
 	}
 
+}
+
+func TestCreatePutWithForceReturnPreviousValue(t *testing.T) {
+
+	expectedPut := []byte{
+		0xA0, //MAGIC BYTE
+		0x00, //Message Id
+		0x19, //Protocol version
+		0x01, //Operation
+		0x00, //Cache name length ("" = default)
+		0x01, //Previous return value flag
+		0x01, //Client intelligence
+		0x00, //Client Topology ID
+		0x01, //Key length
+		0x32, //Key: 2
+		0x12, //ms Lifespan & ns Maxidle
+		0x05, //Lifespan in ms
+		0x04, //Maxidle in ms
+		0x04, //Value length
+		0x75, //u
+		0x67, //g
+		0x6F, //o
+		0x6c, //l
+	}
+
+	put, _ := createPut([]byte("2"), []byte("ugol"), 0, "", "5ms", "4ns", true)
+
+	if !bytes.Equal(expectedPut, put) {
+		t.Errorf("Expected %v, was %v", expectedPut, put)
+	}
 }

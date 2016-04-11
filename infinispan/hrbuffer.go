@@ -12,13 +12,17 @@ func NewBuffer(b []byte) *Buffer {
 }
 
 //CreateHeader creates the basic header for every request
-func (p *Buffer) CreateHeader(messageID uint64, opcode byte, cachename string) {
+func (p *Buffer) CreateHeader(messageID uint64, opcode byte, cachename string, previous bool) {
 	p.EncodeRawBytes([]byte{RequestMagic})
 	p.EncodeVarint(messageID)
 	p.EncodeRawBytes([]byte{Protocol25})
 	p.EncodeRawBytes([]byte{opcode})
 	p.EncodeString(cachename)
-	p.EncodeRawBytes([]byte{0}) //Client flags
+	if previous {
+		p.EncodeRawBytes([]byte{1}) //Force return value flags
+	} else {
+		p.EncodeRawBytes([]byte{0}) //Empty client flags
+	}
 	p.EncodeRawBytes([]byte{ClientIntelligenceBasic})
 	p.EncodeRawBytes([]byte{0}) //Client Topology ID
 }

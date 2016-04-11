@@ -82,9 +82,9 @@ func (c *Client) PutWithOptions(key []byte, object []byte, opts map[string]strin
 		maxidle = "0"
 	}
 
-	returnValues, err := strconv.ParseBool(opts["returnValues"])
+	returnValues, err := strconv.ParseBool(opts["previous"])
 
-	if err == nil {
+	if err != nil {
 		return c.realPut(key, object, lifespan, maxidle, false)
 	}
 	return c.realPut(key, object, lifespan, maxidle, returnValues)
@@ -92,8 +92,8 @@ func (c *Client) PutWithOptions(key []byte, object []byte, opts map[string]strin
 }
 
 //PutWithLifespanAndMaxidle puts an object with a key and a lifespan/maxidle
-func (c *Client) realPut(key []byte, object []byte, lifespan string, maxidle string, returnValue bool) (*ResponsePut, error) {
-	if put, createErr := createPut(key, object, <-id, c.CacheName, lifespan, maxidle); createErr == nil {
+func (c *Client) realPut(key []byte, object []byte, lifespan string, maxidle string, previous bool) (*ResponsePut, error) {
+	if put, createErr := createPut(key, object, <-id, c.CacheName, lifespan, maxidle, previous); createErr == nil {
 		c.connection.Write(put)
 		if status, ioErr := bufio.NewReader(c.connection).Read(c.buf[:1024]); ioErr == nil {
 			p := NewBuffer(c.buf[:status])

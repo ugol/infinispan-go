@@ -114,3 +114,27 @@ func TestLifespanAndMaxidlePut(t *testing.T) {
 	}
 
 }
+
+func TestPutWithPreviousReturn(t *testing.T) {
+
+	if c, err := NewClientJSON(conf); err == nil {
+		defer c.Close()
+
+		opts := map[string]string{
+			"previous": "true",
+		}
+
+		if put, errPut := c.PutWithOptions([]byte("1000"), []byte("ugol"), opts); errPut != nil {
+			t.Error(errPut.Error())
+		} else {
+			if !bytes.Equal([]byte("ugol"), put.object) {
+				t.Errorf("Expected %v, was %v", []byte("ugol"), put)
+			}
+		}
+
+	} else {
+		t.Error(err.Error())
+		return
+	}
+
+}
