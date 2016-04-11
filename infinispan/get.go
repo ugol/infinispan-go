@@ -23,9 +23,8 @@ func createGet(key []byte, messageID uint64, cacheName string) []byte {
 func (p *Buffer) DecodeGetResponse() (*ResponseGet, error) {
 
 	var response = &ResponseGet{}
-	header, err := p.DecodeResponseHeader()
+	if header, err := p.DecodeResponseHeader(); err == nil {
 
-	if err == nil {
 		response.object, _ = p.DecodeRawBytes()
 
 		if header.opcode == ErrorResponse {

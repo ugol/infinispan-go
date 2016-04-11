@@ -7,7 +7,7 @@ import (
 
 // ResponsePut structure for Put Response
 type ResponsePut struct {
-	//empty at the moment
+	object []byte
 }
 
 func createPut(key []byte, value []byte, messageID uint64, cacheName string, lifespan string, maxidle string) ([]byte, error) {
@@ -24,11 +24,15 @@ func createPut(key []byte, value []byte, messageID uint64, cacheName string, lif
 // DecodePutResponse creates a Put Response from a buffer
 func (p *Buffer) DecodePutResponse() (*ResponsePut, error) {
 	var response = &ResponsePut{}
-	header, err := p.DecodeResponseHeader()
-	if err == nil {
-		if header.opcode != PutResponse {
+	if header, err := p.DecodeResponseHeader(); err == nil {
+
+		response.object, _ = p.DecodeRawBytes()
+		if header.opcode == ErrorResponse {
 			log.Printf("%v", header)
-			return response, errors.New("Not a PUT Response")
+			return response, errors.New(DecodeString(response.object))
+		} else if header.opcode != PutResponse {
+			log.Printf("%v", header)
+			return response, errors.New("Not a possible PUT Response")
 		}
 	} else {
 		return response, err
