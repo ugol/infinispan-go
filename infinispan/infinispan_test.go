@@ -38,6 +38,15 @@ func TestSimplePutAndGet(t *testing.T) {
 		} else {
 			t.Error(errGet.Error())
 		}
+
+		if notFound, errGet := c.Get([]byte("4")); errGet == nil {
+			if !bytes.Equal([]byte(""), notFound.object) {
+				t.Errorf("Expected %v, was %v", []byte(""), notFound)
+			}
+		} else {
+			t.Error(errGet.Error())
+		}
+
 	} else {
 		t.Error(err.Error())
 		return
