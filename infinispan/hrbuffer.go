@@ -1,5 +1,10 @@
 package infinispan
 
+import (
+	"errors"
+	"log"
+)
+
 // Buffer is a byte buffer which is the basis to decode/encode
 type Buffer struct {
 	buf   []byte
@@ -57,6 +62,29 @@ func (p *Buffer) DecodeResponseHeader() (*ResponseHeader, error) {
 		response.opcode, _ = p.decodeOpcode()
 		response.status, _ = p.decodeStatus()
 		response.topology, _ = p.decodeTopology()
+	} else {
+		return response, err
+	}
+
+	return response, nil
+}
+
+// DecodeResponse decodes the Header and sends back the response/error
+func (p *Buffer) DecodeResponse(expectedHeader byte) ([]byte, error) {
+
+	var response []byte
+	if header, err := p.DecodeResponseHeader(); err == nil {
+
+		response, _ = p.DecodeRawBytes()
+
+		if header.opcode == ErrorResponse {
+			log.Printf("%v", header)
+			return response, errors.New(DecodeString(response))
+		} else if header.opcode != expectedHeader {
+			log.Printf("%v", header)
+			return response, errors.New("Not a possible Response")
+		}
+
 	} else {
 		return response, err
 	}

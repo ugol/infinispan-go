@@ -54,24 +54,24 @@ func (c *Client) Close() error {
 }
 
 //Get gets a key
-func (c *Client) Get(key []byte) (*ResponseGet, error) {
+func (c *Client) Get(key []byte) ([]byte, error) {
 	get := createGet(key, <-id, c.CacheName)
 	c.connection.Write(get)
 	status, err := bufio.NewReader(c.connection).Read(c.buf[:1024])
 	if err != nil {
-		return &ResponseGet{}, err
+		return []byte{}, err
 	}
 	p := NewBuffer(c.buf[:status])
-	return p.DecodeGetResponse()
+	return p.DecodeResponse(GetResponse)
 }
 
 //Put puts an object with a key
-func (c *Client) Put(key []byte, object []byte) (*ResponsePut, error) {
+func (c *Client) Put(key []byte, object []byte) ([]byte, error) {
 	return c.realPut(key, object, "0", "0", false)
 }
 
 //PutWithOptions puts an object with a key and optional parameters
-func (c *Client) PutWithOptions(key []byte, object []byte, opts map[string]string) (*ResponsePut, error) {
+func (c *Client) PutWithOptions(key []byte, object []byte, opts map[string]string) ([]byte, error) {
 	lifespan := opts["lifespan"]
 	if lifespan == "" {
 		lifespan = "0"
@@ -91,18 +91,17 @@ func (c *Client) PutWithOptions(key []byte, object []byte, opts map[string]strin
 
 }
 
-//PutWithLifespanAndMaxidle puts an object with a key and a lifespan/maxidle
-func (c *Client) realPut(key []byte, object []byte, lifespan string, maxidle string, previous bool) (*ResponsePut, error) {
+func (c *Client) realPut(key []byte, object []byte, lifespan string, maxidle string, previous bool) ([]byte, error) {
 	if put, createErr := createPut(key, object, <-id, c.CacheName, lifespan, maxidle, previous); createErr == nil {
 		c.connection.Write(put)
 		if status, ioErr := bufio.NewReader(c.connection).Read(c.buf[:1024]); ioErr == nil {
 			p := NewBuffer(c.buf[:status])
-			return p.DecodePutResponse()
+			return p.DecodeResponse(PutResponse)
 		} else {
-			return &ResponsePut{}, ioErr
+			return []byte{}, ioErr
 		}
 	} else {
-		return &ResponsePut{}, createErr
+		return []byte{}, createErr
 	}
 
 }

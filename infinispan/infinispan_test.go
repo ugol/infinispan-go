@@ -33,7 +33,7 @@ func TestSimplePutAndGet(t *testing.T) {
 		}
 
 		if ugol, errGet := c.Get([]byte("3")); errGet == nil {
-			if !bytes.Equal([]byte("ugol"), ugol.object) {
+			if !bytes.Equal([]byte("ugol"), ugol) {
 				t.Errorf("Expected %v, was %v", []byte("ugol"), ugol)
 			}
 		} else {
@@ -41,7 +41,7 @@ func TestSimplePutAndGet(t *testing.T) {
 		}
 
 		if notFound, errGet := c.Get([]byte("4")); errGet == nil {
-			if !bytes.Equal([]byte(""), notFound.object) {
+			if !bytes.Equal([]byte(""), notFound) {
 				t.Errorf("Expected %v, was %v", []byte(""), notFound)
 			}
 		} else {
@@ -67,7 +67,7 @@ func TestLifespanAndMaxidlePut(t *testing.T) {
 		c.PutWithOptions([]byte("100"), []byte("T"), opts)
 
 		if found, errGet := c.Get([]byte("100")); errGet == nil {
-			if !bytes.Equal([]byte("T"), found.object) {
+			if !bytes.Equal([]byte("T"), found) {
 				t.Errorf("Expected %v, was %v", []byte("T"), found)
 			}
 		} else {
@@ -77,7 +77,7 @@ func TestLifespanAndMaxidlePut(t *testing.T) {
 		time.Sleep(10 * time.Millisecond)
 
 		if notFound, errGet := c.Get([]byte("100")); errGet == nil {
-			if !bytes.Equal([]byte(""), notFound.object) {
+			if !bytes.Equal([]byte(""), notFound) {
 				t.Errorf("Expected %v, was %v", []byte(""), notFound)
 			}
 		} else {
@@ -91,7 +91,7 @@ func TestLifespanAndMaxidlePut(t *testing.T) {
 		c.PutWithOptions([]byte("200"), []byte("T"), opts)
 
 		if found, errGet := c.Get([]byte("200")); errGet == nil {
-			if !bytes.Equal([]byte("T"), found.object) {
+			if !bytes.Equal([]byte("T"), found) {
 				t.Errorf("Expected %v, was %v", []byte("T"), found)
 			}
 		} else {
@@ -101,7 +101,7 @@ func TestLifespanAndMaxidlePut(t *testing.T) {
 		time.Sleep(10 * time.Millisecond)
 
 		if notFound, errGet := c.Get([]byte("200")); errGet == nil {
-			if !bytes.Equal([]byte(""), notFound.object) {
+			if !bytes.Equal([]byte(""), notFound) {
 				t.Errorf("Expected %v, was %v", []byte(""), notFound)
 			}
 		} else {
@@ -127,7 +127,7 @@ func TestPutWithPreviousReturn(t *testing.T) {
 		if put, errPut := c.PutWithOptions([]byte("1000"), []byte("ugol"), opts); errPut != nil {
 			t.Error(errPut.Error())
 		} else {
-			if !bytes.Equal([]byte("ugol"), put.object) {
+			if !bytes.Equal([]byte("ugol"), put) {
 				t.Errorf("Expected %v, was %v", []byte("ugol"), put)
 			}
 		}
