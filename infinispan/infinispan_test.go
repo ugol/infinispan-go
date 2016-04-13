@@ -121,7 +121,16 @@ func TestPutWithPreviousReturn(t *testing.T) {
 		defer c.Close()
 
 		opts := map[string]string{
+			"lifespan": "10ms",
 			"previous": "true",
+		}
+
+		if put, errPut := c.PutWithOptions([]byte("1000"), []byte("ugol"), opts); errPut != nil {
+			t.Error(errPut.Error())
+		} else {
+			if !bytes.Equal([]byte(""), put) {
+				t.Errorf("Expected %v, was %v", []byte(""), put)
+			}
 		}
 
 		if put, errPut := c.PutWithOptions([]byte("1000"), []byte("ugol"), opts); errPut != nil {
@@ -138,3 +147,19 @@ func TestPutWithPreviousReturn(t *testing.T) {
 	}
 
 }
+
+/*
+func TestRemove(t *testing.T) {
+	if c, err := NewClientJSON(conf); err == nil {
+		defer c.Close()
+
+		if _, err := c.Remove([]byte("1000")); err != nil {
+			t.Error(err.Error())
+		}
+
+	} else {
+		t.Error(err.Error())
+		return
+	}
+
+}*/

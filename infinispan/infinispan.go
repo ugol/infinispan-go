@@ -65,6 +65,32 @@ func (c *Client) Get(key []byte) ([]byte, error) {
 	return p.DecodeResponse(GetResponse)
 }
 
+/*
+//Remove removes a key
+func (c *Client) Remove(key []byte) ([]byte, error) {
+	p := c.readOperation(createRemove(key, <-id, c.CacheName))
+	return p.DecodeResponse(RemoveResponse)
+
+}
+
+
+//ContainsKey removes a key
+func (c *Client) ContainsKey(key []byte) ([]byte, error) {
+	p, err := c.readOperation(createContainsKey(key, <-id, c.CacheName))
+	return p.DecodeResponse(ContainsKeyResponse), err
+
+}
+
+func (c *Client) readOperation(op []byte) (*Buffer, error) {
+	c.connection.Write(op)
+	status, err := bufio.NewReader(c.connection).Read(c.buf[:1024])
+	if err != nil {
+		return []byte{}, err
+	}
+	return NewBuffer(c.buf[:status])
+}
+*/
+
 //Put puts an object with a key
 func (c *Client) Put(key []byte, object []byte) ([]byte, error) {
 	return c.realPut(key, object, "0", "0", false)
