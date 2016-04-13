@@ -6,7 +6,7 @@ func init() {
 	id = MakeID(0)
 }
 
-// MakeID explicitly creates the IDs channel, for example if you don't want to start from 0
+// MakeID explicitly creates the IDs channel, useful in testing
 func MakeID(start uint64) chan uint64 {
 
 	ch := make(chan uint64)
