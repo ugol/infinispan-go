@@ -1,19 +1,21 @@
 package infinispan
 
-var id chan uint64
+// Start explicitly creates the IDs channel, useful in testing
+func Start(start uint64, ch chan uint64, done chan bool) {
 
-func init() {
-	id = MakeID(0)
-}
-
-// MakeID explicitly creates the IDs channel, useful in testing
-func MakeID(start uint64) chan uint64 {
-
-	ch := make(chan uint64)
 	go func() {
-		for i := uint64(start); ; i++ {
-			ch <- i
+
+		i := uint64(start)
+		for {
+			select {
+			case <-done:
+				close(ch)
+				return
+			case ch <- i:
+				i++
+			}
+
 		}
 	}()
-	return ch
+
 }

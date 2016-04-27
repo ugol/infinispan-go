@@ -10,6 +10,9 @@ import (
 	"strings"
 )
 
+var id chan uint64
+var done chan bool
+
 //Server represents an host and a port
 type Server struct {
 	Host string
@@ -32,6 +35,9 @@ func NewClientJSON(conf string) (*Client, error) {
 		log.Printf("Reverting to default conf because of error in JSON: %s", conf)
 		c = &Client{Servers: []Server{Server{Host: "127.0.0.1", Port: 11222}}, CacheName: ""}
 	}
+	id = make(chan uint64)
+	done = make(chan bool)
+	Start(0, id, done)
 	return c.connect()
 }
 
@@ -48,6 +54,7 @@ func (c *Client) connect() (*Client, error) {
 //Close Hot Rod Connection
 func (c *Client) Close() error {
 	if c.connection != nil {
+		//done <- true
 		return c.connection.Close()
 	}
 	return nil
